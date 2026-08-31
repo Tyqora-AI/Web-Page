@@ -1,0 +1,10 @@
+export function DeviceVisual() {
+  return <div className="hero-visual reveal visible" aria-label="Tyqora digital stethoscope concept">
+    <div className="signal-label signal-one"><i/><span><small>Signal quality</small>Excellent</span></div>
+    <div className="signal-label signal-two"><i/><span><small>Analysis</small>On device</span></div><div className="device-halo"/>
+    <svg className="device" viewBox="0 0 420 520" role="img" aria-label="TYQ-DST01 digital stethoscope">
+      <defs><linearGradient id="device-body" x1="0" y1="0" x2="1" y2="1"><stop stopColor="#253c49"/><stop offset=".5" stopColor="#0c1c25"/><stop offset="1" stopColor="#050c12"/></linearGradient><linearGradient id="device-edge"><stop stopColor="#3ae0ca"/><stop offset=".5" stopColor="#3388ff"/><stop offset="1" stopColor="#a36dff"/></linearGradient><filter id="shadow"><feDropShadow dx="0" dy="25" stdDeviation="22" floodOpacity=".45"/></filter></defs>
+      <g filter="url(#shadow)" transform="rotate(4 210 260)"><rect x="88" y="32" width="244" height="420" rx="55" fill="url(#device-body)" stroke="#415966" strokeWidth="2"/><rect x="103" y="48" width="214" height="388" rx="43" fill="none" stroke="url(#device-edge)" strokeOpacity=".35"/><rect x="120" y="95" width="180" height="146" rx="24" fill="#061219" stroke="#2b424c"/><text x="144" y="126" fill="#75909b" fontSize="11">LUNG SOUND · LIVE</text><polyline points="140,180 158,180 166,153 178,207 190,165 202,180 218,180 226,142 240,215 251,171 264,180 282,180" fill="none" stroke="#39dbc7" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/><circle cx="210" cy="292" r="24" fill="#102832" stroke="url(#device-edge)" strokeWidth="3"/><path d="M201 292h18M210 283v18" stroke="#bdeee8" strokeWidth="3" strokeLinecap="round"/><text x="160" y="361" fill="#f2f8fa" fontSize="25" fontWeight="700" letterSpacing="3">TYQORA</text><text x="171" y="383" fill="#67808b" fontSize="9" letterSpacing="2">CLINICAL INTELLIGENCE</text><path d="M175 451v24c0 20-15 28-15 42M245 451v24c0 20 15 28 15 42" fill="none" stroke="#172c35" strokeWidth="10" strokeLinecap="round"/></g>
+    </svg>
+  </div>;
+}
