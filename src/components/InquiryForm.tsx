@@ -6,11 +6,24 @@ export function InquiryForm() {
   const [status, setStatus] = useState("");
   const [busy, setBusy] = useState(false);
   async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault(); setBusy(true); setStatus("");
+    event.preventDefault();
+    setBusy(true);
+    setStatus("");
     const form = event.currentTarget;
-    const response = await fetch("/api/inquiries", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(Object.fromEntries(new FormData(form))) });
-    const data = await response.json(); setBusy(false);
-    if (response.ok) { form.reset(); setStatus("Thank you. Our team will be in touch."); } else setStatus(data.error || "Please try again.");
+    try {
+      const response = await fetch("/api/inquiries", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(Object.fromEntries(new FormData(form))) });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        setStatus(data.error || "Your message could not be sent. Please try again.");
+        return;
+      }
+      form.reset();
+      setStatus("Thank you. Our team will be in touch.");
+    } catch {
+      setStatus("The network request failed. Check your connection and try again.");
+    } finally {
+      setBusy(false);
+    }
   }
   return <form className="contact-form" onSubmit={submit}>
     <label><span>Name</span><input name="name" autoComplete="name" required placeholder="Your name"/></label>

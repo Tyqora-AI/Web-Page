@@ -24,7 +24,7 @@ vercel.json            Vercel configuration
 
 1. Run `npm install`.
 2. Copy `.env.example` to `.env.local` and provide `DATABASE_URL` and `AUTH_SECRET`.
-3. Run [`db/schema.sql`](db/schema.sql) in the Neon SQL editor once.
+3. Run [`db/schema.sql`](db/schema.sql) in the Neon SQL editor once. If your database was created with an earlier schema, also run [`db/migrations/001_harden_orders.sql`](db/migrations/001_harden_orders.sql).
 4. Run `npm run dev` and open `http://localhost:3000`.
 
 ## Deploy to Vercel
