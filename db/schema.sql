@@ -1,0 +1,24 @@
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+CREATE TABLE IF NOT EXISTS users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name VARCHAR(80) NOT NULL,
+  email VARCHAR(160) NOT NULL UNIQUE,
+  organization VARCHAR(120) NOT NULL DEFAULT '',
+  role VARCHAR(60) NOT NULL DEFAULT 'Healthcare professional',
+  country VARCHAR(80) NOT NULL DEFAULT '',
+  password_hash TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE TABLE IF NOT EXISTS products (id VARCHAR(30) PRIMARY KEY, name VARCHAR(120) NOT NULL, price_cents INTEGER NOT NULL CHECK (price_cents > 0), status VARCHAR(30) NOT NULL DEFAULT 'available');
+CREATE TABLE IF NOT EXISTS orders (
+  id VARCHAR(40) PRIMARY KEY, user_id UUID NOT NULL REFERENCES users(id), product_id VARCHAR(30) NOT NULL REFERENCES products(id),
+  quantity INTEGER NOT NULL CHECK (quantity BETWEEN 1 AND 20), total_cents INTEGER NOT NULL,
+  status VARCHAR(40) NOT NULL DEFAULT 'Request received', recipient_name VARCHAR(100) NOT NULL, phone VARCHAR(40) NOT NULL,
+  address VARCHAR(180) NOT NULL, city VARCHAR(80) NOT NULL, region VARCHAR(80) NOT NULL, country VARCHAR(80) NOT NULL,
+  postal_code VARCHAR(20) NOT NULL DEFAULT '', notes VARCHAR(500) NOT NULL DEFAULT '', created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE TABLE IF NOT EXISTS inquiries (id BIGSERIAL PRIMARY KEY, name VARCHAR(80) NOT NULL, email VARCHAR(160) NOT NULL, organization VARCHAR(120) NOT NULL DEFAULT '', message VARCHAR(1000) NOT NULL, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
+CREATE INDEX IF NOT EXISTS orders_user_created_idx ON orders(user_id, created_at DESC);
+INSERT INTO products (id, name, price_cents) VALUES ('TYQ-DST01', 'Tyqora Digital Stethoscope', 59900) ON CONFLICT (id) DO NOTHING;
