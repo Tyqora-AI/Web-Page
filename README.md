@@ -27,6 +27,8 @@ vercel.json            Vercel configuration
 3. Run [`db/schema.sql`](db/schema.sql) in the Neon SQL editor once. If your database was created with an earlier schema, also run [`db/migrations/001_harden_orders.sql`](db/migrations/001_harden_orders.sql).
 4. Run `npm run dev` and open `http://localhost:3000`.
 
+Open `/api/health` to verify configuration. A ready deployment returns HTTP 200 with all four checks set to `true`; HTTP 503 means an environment variable, database connection, or schema is still missing.
+
 ## Deploy to Vercel
 
 1. Push the repository to GitHub, GitLab, or Bitbucket and import it into Vercel.
