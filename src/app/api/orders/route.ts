@@ -10,6 +10,23 @@ export async function GET() {
 }
 export async function POST(request: Request) {
   const userId = await sessionUserId(); if (!userId) return Response.json({ error: "Please sign in to continue." }, { status: 401 });
-  try { const parsed = orderSchema.safeParse(await request.json()); if (!parsed.success) return invalid("Complete all required delivery fields."); const { productId, quantity, delivery: d } = parsed.data; const sql = db(); const products = await sql`SELECT price_cents FROM products WHERE id=${productId} AND status='available' LIMIT 1`; if (!products.length) return invalid("This product is not currently available."); const orderId = `TYQ-${Date.now().toString(36).toUpperCase()}-${randomBytes(2).toString("hex").toUpperCase()}`; await sql`INSERT INTO orders (id,user_id,product_id,quantity,total_cents,recipient_name,phone,address,city,region,country,postal_code,notes) VALUES (${orderId},${userId},${productId},${quantity},${Number(products[0].price_cents)*quantity},${d.name},${d.phone},${d.address},${d.city},${d.region},${d.country},${d.postalCode},${d.notes})`; return Response.json({ order: { id: orderId, status: "Request received" } }, { status: 201 }); }
+  const idempotencyKey = request.headers.get("Idempotency-Key")?.trim();
+  if (!idempotencyKey || !/^[A-Za-z0-9_-]{16,64}$/.test(idempotencyKey)) return invalid("A valid idempotency key is required.");
+  try {
+    const parsed = orderSchema.safeParse(await request.json());
+    if (!parsed.success) return invalid("Complete all required delivery fields.");
+    const { productId, quantity, delivery: d } = parsed.data;
+    const sql = db();
+    const existing = await sql`SELECT id,status FROM orders WHERE user_id=${userId} AND idempotency_key=${idempotencyKey} LIMIT 1`;
+    if (existing.length) return Response.json({ order: existing[0], replayed: true });
+    const products = await sql`SELECT price_cents FROM products WHERE id=${productId} AND status='available' LIMIT 1`;
+    if (!products.length) return invalid("This product is not currently available.");
+    const orderId = `TYQ-${Date.now().toString(36).toUpperCase()}-${randomBytes(2).toString("hex").toUpperCase()}`;
+    const rows = await sql`INSERT INTO orders (id,user_id,product_id,quantity,total_cents,idempotency_key,recipient_name,phone,address,city,region,country,postal_code,notes)
+      VALUES (${orderId},${userId},${productId},${quantity},${Number(products[0].price_cents)*quantity},${idempotencyKey},${d.name},${d.phone},${d.address},${d.city},${d.region},${d.country},${d.postalCode},${d.notes})
+      ON CONFLICT (user_id,idempotency_key) DO UPDATE SET idempotency_key=EXCLUDED.idempotency_key
+      RETURNING id,status`;
+    return Response.json({ order: rows[0] }, { status: 201 });
+  }
   catch (error) { console.error(error); return Response.json({ error: "Order request could not be submitted." }, { status: 500 }); }
 }

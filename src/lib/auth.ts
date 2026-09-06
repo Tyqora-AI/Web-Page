@@ -8,6 +8,10 @@ const secret = () => {
   return new TextEncoder().encode(value);
 };
 
+export function assertSessionConfiguration() {
+  secret();
+}
+
 export async function createSession(userId: string) {
   const token = await new SignJWT({ userId }).setProtectedHeader({ alg: "HS256" }).setIssuedAt().setExpirationTime("14d").sign(secret());
   const store = await cookies();

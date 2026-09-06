@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   title: { default: "Tyqora — Clinical intelligence for every frontline", template: "%s — Tyqora" },
   description: "Tyqora builds AI-assisted, accessible clinical tools for frontline healthcare teams across Africa.",
+  icons: { icon: "/brand/tyqora-symbol.png", apple: "/brand/tyqora-symbol.png" },
   openGraph: { title: "Tyqora Healthcare Intelligence", description: "Clinical clarity, where it matters most.", type: "website" },
 };
 
