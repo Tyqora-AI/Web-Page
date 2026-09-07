@@ -3,7 +3,10 @@ import Image from "next/image";
 
 export function Brand({ inverse = false, portal = false }: { inverse?: boolean; portal?: boolean }) {
   return <Link className={`brand${inverse ? " inverse" : ""}`} href="/" aria-label="Tyqora home">
-    <Image className="brand-mark" src="/brand/tyqora-symbol.png" alt="" width={48} height={48} priority />
-    <span><strong>TYQORA</strong><small>{portal ? "Customer portal" : "AI powered healthcare intelligence"}</small></span>
+    <span className="brand-lockup" aria-hidden="true">
+      <Image className="brand-mark" src="/brand/tyqora-symbol.png" alt="" width={348} height={286} priority />
+      <Image className="brand-wordmark" src="/brand/tyqora-wordmark.png" alt="" width={670} height={180} priority />
+    </span>
+    {portal && <small className="brand-context">Customer portal</small>}
   </Link>;
 }
