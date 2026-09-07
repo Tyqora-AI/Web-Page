@@ -41,9 +41,7 @@ em { color: transparent; background: var(--accent); background-clip: text; -webk
 .brand-lockup { display: inline-flex; align-items: center; gap: 8px; }
 .brand-mark { width: 39px; height: 34px; object-fit: contain; flex: 0 0 auto; }
 .brand-wordmark { width: 126px; height: auto; object-fit: contain; flex: 0 0 auto; }
-.brand-context { color: var(--muted); font-size: 8px; text-transform: uppercase; letter-spacing: .11em; font-weight: 800; }
-.brand.inverse .brand-lockup { background: #fff; border-radius: 7px; padding: 5px 7px; }
-.brand.inverse .brand-context { color: #84a0aa; }
+.brand.inverse .brand-wordmark { filter: grayscale(1) invert(1) brightness(2.4); opacity: .96; }
 .primary-nav { display: flex; justify-content: center; align-items: center; gap: clamp(18px, 2.4vw, 34px); }
 .primary-nav a { position: relative; padding: 28px 0; color: #39515a; font-size: 13px; font-weight: 650; }
 .primary-nav a::after { content: ""; position: absolute; left: 0; bottom: 21px; width: 0; height: 2px; background: var(--mint-dark); transition: width .2s; }
