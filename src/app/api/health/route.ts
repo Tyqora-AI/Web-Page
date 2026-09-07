@@ -1,10 +1,10 @@
-import { db } from "@/lib/db";
+import { db, getDatabaseUrl } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   const checks = {
-    databaseUrl: Boolean(process.env.DATABASE_URL),
+    databaseUrl: Boolean(getDatabaseUrl()),
     authSecret: Boolean(process.env.AUTH_SECRET && process.env.AUTH_SECRET.length >= 32),
     databaseConnection: false,
     schema: false,
